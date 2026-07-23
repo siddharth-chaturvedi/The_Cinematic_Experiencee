@@ -239,7 +239,16 @@
 
         .player-paused .bar { animation-play-state: paused; height: 10% !important; transition: height 0.3s; }
 
-        #yt-player { position: absolute; width: 0; height: 0; border: 0; opacity: 0; pointer-events: none; }
+        /* Modified to fix YouTube API restrictions */
+        #yt-player { 
+            position: absolute; 
+            top: -9999px; 
+            left: -9999px; 
+            width: 200px; 
+            height: 200px; 
+            opacity: 0; 
+            pointer-events: none; 
+        }
 
         /* =========================================
            LYRICS SECTION
@@ -731,11 +740,11 @@
 
         function onYouTubeIframeAPIReady() {
             ytPlayer = new YT.Player('yt-player', {
-                height: '0',
-                width: '0',
+                height: '200',
+                width: '200',
                 videoId: '_dAkj5dxmEM', 
                 playerVars: {
-                    'autoplay': 1, // Browser might block this
+                    'autoplay': 0, // Browsers block autoplay anyway, user must click play
                     'controls': 0,
                     'playsinline': 1,
                     'loop': 1,
@@ -749,9 +758,7 @@
         }
 
         function onPlayerReady(event) {
-            // Attempt autoplay
-            event.target.playVideo();
-            // Start lyrics sync loop
+            // Start lyrics sync loop. Music won't play until button is clicked.
             setInterval(syncLyrics, 500);
         }
 
@@ -852,11 +859,7 @@
         // 5. DECISION BUTTON & EMAILJS INTEGRATION
         // ==========================================
         
-        // IMPORTANT INSTRUCTION FOR THE USER:
-        // To make the email actually send, you must sign up for EmailJS (https://www.emailjs.com/)
-        // Replace 'YOUR_PUBLIC_KEY', 'YOUR_SERVICE_ID', and 'YOUR_TEMPLATE_ID' with your actual keys.
-        
-        // Initialize EmailJS (Put your Public Key here)
+        // Initialize EmailJS with your real Public Key
         emailjs.init("SSAuFScl8tG6gMb55"); 
 
         function handleYesClick() {
@@ -868,7 +871,7 @@
             msg.style.display = 'block';
             isCelebrating = true;
             
-            // Force music to play if it isn't
+            // Force music to play if it isn't playing already
             if(!isPlaying && ytPlayer) togglePlay();
 
             // Prepare Email Params based on prompt requirements
@@ -878,16 +881,14 @@
                 message: `Hi Siddharth,\n\nThis is an automated confirmation from the friendship webpage.\n\nAakrati clicked YES to your friendship request.\n\nMay this friendship continue to grow through every conversation, every laugh, every misunderstanding, and every new beginning.\n\nHere's to a bond that stays strong through every season of life.\n\nBest wishes,\nFriendship Webpage`
             };
 
-            // Send Email (Wrap in try/catch to avoid breaking UI if keys aren't set)
+            // Send Email using your real Service ID and Template ID
             try {
                 emailjs.send('service_y7kmgev', 'template_5e9k89g', templateParams)
                     .then(function(response) {
-                        console.log('SUCCESS!', response.status, response.text);
+                        console.log('SUCCESS! Email Sent.', response.status, response.text);
                     }, function(error) {
                         console.log('FAILED...', error);
                     });
-
-               console.log("EmailJS ready to trigger. Add Service/Template IDs to execute.");
             } catch (err) {
                 console.error("EmailJS Error:", err);
             }
