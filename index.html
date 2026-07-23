@@ -857,7 +857,7 @@
         // Replace 'YOUR_PUBLIC_KEY', 'YOUR_SERVICE_ID', and 'YOUR_TEMPLATE_ID' with your actual keys.
         
         // Initialize EmailJS (Put your Public Key here)
-        emailjs.init("YOUR_PUBLIC_KEY"); 
+        emailjs.init("SSAuFScl8tG6gMb55"); 
 
         function handleYesClick() {
             const btn = document.getElementById('btn-yes');
@@ -880,9 +880,7 @@
 
             // Send Email (Wrap in try/catch to avoid breaking UI if keys aren't set)
             try {
-                // Uncomment and use actual IDs below once you have them
-                /*
-                emailjs.send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams)
+                emailjs.send('service_y7kmgev', 'template_5e9k89g', templateParams)
                     .then(function(response) {
                         console.log('SUCCESS!', response.status, response.text);
                     }, function(error) {
